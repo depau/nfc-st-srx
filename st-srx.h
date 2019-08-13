@@ -27,7 +27,8 @@ typedef struct {
 typedef union {
     st_srix4k_tag_t srix4k;
     st_sri512_tag_t sri512;
-    uint8_t raw[DUMP_LEN * 4];
+    uint8_t raw_bytes[DUMP_LEN * 4];
+    uint8_t raw_blocks[DUMP_LEN][4];
 } st_srx_tag_t;
 
 size_t st_srx_get_uid(nfc_device *pnd, uint8_t *uidRx, bool verbose);
