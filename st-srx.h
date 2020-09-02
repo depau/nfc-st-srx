@@ -31,8 +31,8 @@ typedef union {
     uint8_t raw_blocks[DUMP_LEN][4];
 } st_srx_tag_t;
 
-size_t st_srx_get_uid(nfc_device *pnd, uint8_t *uidRx, bool verbose);
-size_t st_srx_read_block(nfc_device *pnd, uint8_t *blockRx, uint8_t address, bool verbose);
-size_t st_srx_write_block(nfc_device *pnd, uint8_t *blockRx, uint8_t address, uint8_t *data, bool verbose);
+size_t st_srx_get_uid(nfc_device *pnd, uint8_t *uidRx, size_t szUid, bool verbose);
+size_t st_srx_read_block(nfc_device *pnd, uint8_t *blockRx, size_t szRead, uint8_t address, bool verbose);
+size_t st_srx_write_block(nfc_device *pnd, uint8_t *blockRx, size_t szWrite, uint8_t address, uint8_t *data, bool verbose);
 
 #endif //NFC_ST_SRX_ST_SRX_H

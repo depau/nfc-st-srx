@@ -73,7 +73,7 @@ dump_eeprom(st_srx_tag_t *dest, bool verbose) {
     fprintf(stderr, "Reading %d blocks\n|", tag_length);
     for (uint8_t i = 0; i < tag_length; i++) {
         uint8_t *block_dest = dest->raw_bytes + i * 4;
-        if (st_srx_read_block(pnd, block_dest, i, verbose) <= 0) {
+        if (st_srx_read_block(pnd, block_dest, sizeof(uint8_t) * 4, i, verbose) <= 0) {
             nfc_perror(pnd, "nfc_initiator_transceive_bytes");
             nfc_close(pnd);
             nfc_exit(context);
@@ -86,7 +86,7 @@ dump_eeprom(st_srx_tag_t *dest, bool verbose) {
 
     fprintf(stderr, "Reading system area block (0xFF)\n");
     uint8_t *block_dest = dest->raw_bytes + 0xff * 4;
-    if (st_srx_read_block(pnd, block_dest, 0xff, verbose) <= 0) {
+    if (st_srx_read_block(pnd, block_dest, sizeof(uint8_t) * 4, 0xff, verbose) <= 0) {
         nfc_perror(pnd, "nfc_initiator_transceive_bytes");
         nfc_close(pnd);
         nfc_exit(context);
@@ -186,7 +186,7 @@ write_eeprom(st_srx_tag_t *src, bool verbose) {
     for (uint8_t i = 0; i < tag_length; i++) {
         uint8_t *block_src = src->raw_blocks[i];
 
-        if (st_srx_read_block(pnd, abtRx, i, verbose) <= 0) {
+        if (st_srx_read_block(pnd, abtRx, sizeof(abtRx), i, verbose) <= 0) {
             nfc_perror(pnd, "nfc_initiator_transceive_bytes");
             nfc_close(pnd);
             nfc_exit(context);
@@ -194,7 +194,7 @@ write_eeprom(st_srx_tag_t *src, bool verbose) {
         }
 
         if (memcmp(block_src, abtRx, 4) != 0) {
-            if (st_srx_write_block(pnd, abtRx, i, block_src, verbose) <= 0) {
+            if (st_srx_write_block(pnd, abtRx, sizeof(abtRx), i, block_src, verbose) <= 0) {
                 nfc_perror(pnd, "nfc_initiator_transceive_bytes");
                 nfc_close(pnd);
                 nfc_exit(context);
@@ -210,14 +210,14 @@ write_eeprom(st_srx_tag_t *src, bool verbose) {
 
     fprintf(stderr, "Writing system area block (0xFF)\n");
     uint8_t *block_src = src->srix4k.system_block;
-    if (st_srx_read_block(pnd, abtRx, 0xFF, verbose) <= 0) {
+    if (st_srx_read_block(pnd, abtRx, sizeof(abtRx), 0xFF, verbose) <= 0) {
         nfc_perror(pnd, "nfc_initiator_transceive_bytes");
         nfc_close(pnd);
         nfc_exit(context);
         return EXIT_FAILURE;
     }
     if (memcmp(block_src, abtRx, 4) != 0) {
-        if (st_srx_write_block(pnd, abtRx, 0xFF, block_src, verbose) <= 0) {
+        if (st_srx_write_block(pnd, abtRx, sizeof(abtRx), 0xFF, block_src, verbose) <= 0) {
             nfc_perror(pnd, "nfc_initiator_transceive_bytes");
             nfc_close(pnd);
             nfc_exit(context);
@@ -362,7 +362,7 @@ main(int argc, const char *argv[]) {
 
     // Try to retrieve the UID using the SRx protocol to confirm it's working
     fprintf(stderr, "Found ISO14443B-2 tag, UID:\n");
-    size_t received_bytes = st_srx_get_uid(pnd, abtRx, true);
+    size_t received_bytes = st_srx_get_uid(pnd, abtRx, sizeof(abtRx), true);
     if (received_bytes <= 0) {
         fclose(dump_fd);
         ERR("Failed to retrieve the UID");

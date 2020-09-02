@@ -95,6 +95,6 @@
 
 void print_hex(const uint8_t *pbtData, size_t szLen);
 void print_nfc_target(const nfc_target *pnt, bool verbose);
-size_t transceive_bytes(nfc_device *pnd, const uint8_t *pbtTx, uint8_t *pbtRx, size_t szTx, bool verbose);
+size_t transceive_bytes(nfc_device *pnd, const uint8_t *pbtTx, uint8_t *pbtRx, size_t szTx, size_t szRx, bool verbose);
 
 #endif
