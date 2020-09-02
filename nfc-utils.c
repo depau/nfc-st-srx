@@ -69,7 +69,7 @@ print_nfc_target(const nfc_target *pnt, bool verbose) {
 }
 
 size_t
-transceive_bytes(nfc_device *pnd, const uint8_t *pbtTx, uint8_t *pbtRx, const size_t szTx, bool verbose) {
+transceive_bytes(nfc_device *pnd, const uint8_t *pbtTx, uint8_t *pbtRx, const size_t szTx, const size_t szRx, bool verbose) {
     if (verbose) {
         // Show transmitted command
         fprintf(stderr, "Sent bits:     ");
@@ -79,7 +79,7 @@ transceive_bytes(nfc_device *pnd, const uint8_t *pbtTx, uint8_t *pbtRx, const si
     // Transmit the command bytes
     size_t res;
 
-    if ((res = nfc_initiator_transceive_bytes(pnd, pbtTx, szTx, pbtRx, sizeof(pbtRx), 0)) < 0)
+    if ((res = nfc_initiator_transceive_bytes(pnd, pbtTx, szTx, pbtRx, szRx, 0)) < 0)
         return false;
 
     if (verbose) {
